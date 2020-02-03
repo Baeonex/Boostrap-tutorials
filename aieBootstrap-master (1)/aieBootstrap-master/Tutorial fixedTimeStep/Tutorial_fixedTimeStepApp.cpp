@@ -3,6 +3,7 @@
 #include "Font.h"
 #include "Input.h"
 #include "Gizmos.h"
+#include "Sphere.h"
 Tutorial_fixedTimeStepApp::Tutorial_fixedTimeStepApp() {
 
 }
@@ -19,8 +20,18 @@ bool Tutorial_fixedTimeStepApp::startup() {
 	aie::Gizmos::create(255U, 255U, 65535U, 65535U);
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 
+
 	m_physicsScene = new PhysicsScene;
+	m_physicsScene->setGravity(glm::vec2(0, 0));
 	m_physicsScene->setTimeStep(0.01f);
+
+	Sphere* ball1 = new Sphere(glm::vec2(-20, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1)); 
+	Sphere* ball2 = new Sphere(glm::vec2(10, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(0, 1, 0, 1));
+
+	m_physicsScene->addActor(ball1);  m_physicsScene->addActor(ball2);
+
+	ball1->applyForce(glm::vec2(15, 0));  
+	ball2->applyForce(glm::vec2(-15, 0));
 	
 
 	return true;

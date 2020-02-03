@@ -163,11 +163,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PhysicsScene.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Tutorial_fixedTimeStepApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhysicsScene.h" />
+    <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Tutorial_fixedTimeStepApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
