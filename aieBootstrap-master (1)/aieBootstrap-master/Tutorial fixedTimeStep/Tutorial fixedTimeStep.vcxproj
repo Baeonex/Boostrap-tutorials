@@ -163,6 +163,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PhysicsScene.cpp" />
+    <ClCompile Include="PLane.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Tutorial_fixedTimeStepApp.cpp" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhysicsScene.h" />
+    <ClInclude Include="PLane.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Tutorial_fixedTimeStepApp.h" />

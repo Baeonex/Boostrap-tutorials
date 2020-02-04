@@ -11,7 +11,6 @@ bool Sphere::checkCollision(PhysicsObject* pOther)
 	Sphere* sphere = dynamic_cast<Sphere*>(pOther);
 	if (sphere != NULL)
 	{
-
 		if (glm::distance(m_position, sphere->m_position) < (m_radius + sphere->m_radius))
 		{
 			return true;
