@@ -14,7 +14,6 @@ PhysicsScene::~PhysicsScene()
 	for (auto pActor : m_actors) { delete pActor; }
 }
 void PhysicsScene::update(float dt) {
-	static std::list<PhysicsObject*> dirty;
 
 	// update physics at a fixed time step 
 	static float accumulatedTime = 0.0f; 
@@ -26,44 +25,9 @@ void PhysicsScene::update(float dt) {
 			pActor->fixedUpdate(m_gravity, m_timeStep); 
 		}  
 		accumulatedTime -= m_timeStep;
-
+		checkForCollision();
 		// check for collisions (ideally you'd want to have some sort of    // scene management in place)   
-		for (auto pActor : m_actors) {
-			for (auto pOther : m_actors) {
-				if (pActor == pOther)
-					continue;
-				if (std::find(dirty.begin(), dirty.end(), pActor) != dirty.end() && std::find(dirty.begin(), dirty.end(), pOther) != dirty.end())
-					continue;
-
-				Rigidbody* pRigid = dynamic_cast<Rigidbody*>(pActor);
-				if (pRigid->checkCollision(pOther))
-				{
-					Rigidbody* pOtherRigid = dynamic_cast<Rigidbody*>(pOther);
-
-					// P = m * v
-					// f = P / t
-					// f = m * a (constant mass)
-
-					/* original code
-					pRigid->ApplyForceToActor(
-						pOtherRigid,
-						pRigid->GetVelocity() * pRigid->GetMass()
-					);
-					*/
-					float combinedMass = (pRigid->getMass() * pOtherRigid->getMass()) / (pRigid->getMass() + pOtherRigid->getMass()) * 3.0;
-					glm::vec2 ImpactVector = glm::normalize(pOtherRigid->getPosition() - pRigid->getPosition());
-					glm::vec2 relativeVelocity = pRigid->getVelocity() - pOtherRigid->getVelocity();
-					//need to remove overlap at this point but I have not written the code to do this yet!
-					float transmittedForce = glm::dot(relativeVelocity, ImpactVector);
-					pRigid->applyForceToActor(
-						pOtherRigid,
-						ImpactVector * transmittedForce * combinedMass);
-					dirty.push_back(pRigid);
-					dirty.push_back(pOther);
-				}
-			}
-		}
-		dirty.clear();
+		
 	}
 } 
 
@@ -170,6 +134,7 @@ bool PhysicsScene::sphere2Plane(PhysicsObject* obj1, PhysicsObject* obj2)
 	if (sphere != nullptr && plane != nullptr)
 	{
 		glm::vec2 collisionNormal = plane->getNormal();
+		glm::vec2 contact = sphere->getPosition() + (collisionNormal * -sphere->getRadius());
 		float sphereToPlane = glm::dot(
 			sphere->getPosition(),
 			plane->getNormal()) - plane->getDistance();
@@ -180,39 +145,17 @@ bool PhysicsScene::sphere2Plane(PhysicsObject* obj1, PhysicsObject* obj2)
 		}
 		float intersection = sphere->getRadius() - sphereToPlane;
 		if (intersection > 0) {
-			plane->resolveCollision(sphere);
+			plane->resolveCollision(sphere, contact);
 			//set sphere velocity to zero here
 			return true;
 		}
-		std::cout << "it workd" << std::endl;
 	}
 	return false;
 }
 
 bool PhysicsScene::plane2Sphere(PhysicsObject* obj1, PhysicsObject* obj2)
 {
-	Sphere* sphere = dynamic_cast<Sphere*>(obj1);
-	Plane* plane = dynamic_cast<Plane*>(obj2);
-	//if we are successful then test for collision
-	if (sphere != nullptr && plane != nullptr)
-	{
-		glm::vec2 collisionNormal = plane->getNormal();
-		float sphereToPlane = glm::dot(
-			sphere->getPosition(),
-			plane->getNormal()) - plane->getDistance();
-		// if we are behind plane then we flip the normal
-		if (sphereToPlane < 0) {
-			collisionNormal *= -1;
-			sphereToPlane *= -1;
-		}
-		float intersection = sphere->getRadius() - sphereToPlane;
-		if (intersection > 0) {
-			//set sphere velocity to zero here
-			return true;
-		}
-		std::cout << "it workd" << std::endl;
-	}
-	return false;
+	return sphere2Plane(obj2, obj1);
 }
 bool PhysicsScene::plane2Plane(PhysicsObject* obj1, PhysicsObject* obj2)
 {

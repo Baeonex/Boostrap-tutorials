@@ -18,7 +18,7 @@ public:
     {
 
     }
-    virtual void resolveCollision(Rigidbody* actor2);
+    virtual void resolveCollision(Rigidbody* actor2, glm::vec2 contact);
     virtual bool checkCollision(PhysicsObject* pOther) { return false; }
     virtual void fixedUpdate(glm::vec2 gravity, float timeStep) {}
     virtual void debug() {}

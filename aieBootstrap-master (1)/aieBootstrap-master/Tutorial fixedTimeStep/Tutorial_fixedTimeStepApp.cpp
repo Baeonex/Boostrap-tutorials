@@ -26,12 +26,12 @@ bool Tutorial_fixedTimeStepApp::startup() {
 	//m_physicsScene->setGravity(glm::vec2(0, -10));
 	m_physicsScene->setTimeStep(0.02f);
 
-	m_plane = new Plane(glm::vec2(1, 0), 1);
+	m_plane = new Plane(glm::vec2(-1, 0), 1);
 	Sphere * sphere = new Sphere(glm::vec2(-20, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1));
 
 	m_physicsScene->addActor(sphere);
 	m_physicsScene->addActor(m_plane);
-	sphere->applyForce(glm::vec2(20, 0));
+	sphere->applyForce(glm::vec2(30, 0));
 
 	/*
 	m_physicsScene->setGravity(glm::vec2(0,-10));
@@ -71,7 +71,6 @@ void Tutorial_fixedTimeStepApp::update(float deltaTime) {
 	// input example
 	aie::Input* input = aie::Input::getInstance();
 	aie::Gizmos::clear();
-	m_physicsScene->checkForCollision();
 	m_physicsScene->update(deltaTime);
 	m_physicsScene->updateGizmos();
 	m_plane->makeGizmo();
