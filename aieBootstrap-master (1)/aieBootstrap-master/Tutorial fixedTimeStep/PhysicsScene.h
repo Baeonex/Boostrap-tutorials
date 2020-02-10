@@ -1,8 +1,8 @@
 #pragma once
 #include "glm\ext.hpp"
 #include <Vector>
-
 enum ShapeType { PLANE = 0, SPHERE, BOX };
+
 
 class PhysicsObject {
 
@@ -12,7 +12,7 @@ public:
     virtual void fixedUpdate(glm::vec2 gravity, float timeStep) = 0;
     virtual void debug() = 0;  virtual void makeGizmo() = 0;
     virtual void resetPosition() {};
-
+    ShapeType getShapeID() { return m_shapeID; }
 protected:
     ShapeType m_shapeID;
 };
@@ -32,6 +32,13 @@ public:
 
     void setTimeStep(const float timeStep) { m_timeStep = timeStep; }  
     float getTimeStep() const { return m_timeStep; }
+
+    void checkForCollision();
+    static bool plane2Plane(PhysicsObject*, PhysicsObject*);
+    static bool plane2Sphere(PhysicsObject*, PhysicsObject*);
+    static bool sphere2Plane(PhysicsObject*, PhysicsObject*);
+    static bool sphere2Sphere(PhysicsObject*, PhysicsObject*);
+
 
 protected:  
     glm::vec2 m_gravity;  

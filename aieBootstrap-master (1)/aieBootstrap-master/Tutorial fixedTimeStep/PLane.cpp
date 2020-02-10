@@ -1,5 +1,7 @@
 #include "PLane.h"
 #include "Gizmos.h"
+#include <iostream>
+using namespace std;
 void Plane::makeGizmo()
 {
 	float lineSegmentLength = 300;  
@@ -10,5 +12,16 @@ void Plane::makeGizmo()
 	glm::vec2 start = centerPoint + (parallel * lineSegmentLength); 
 	glm::vec2 end = centerPoint - (parallel * lineSegmentLength); 
 	aie::Gizmos::add2DLine(start, end, colour);
+	
+}
+
+void Plane::resolveCollision(Rigidbody* actor2)
+{
+	glm::vec2 relativeVelocity = actor2->getVelocity() - m_velocity;
+	float elasticity = 1;
+	float j = glm::dot( -(1 + elasticity) * (actor2->getVelocity()), m_normal);
+
+	glm::vec2 force = m_normal * j;
+	applyForceToActor(actor2, force);
 	
 }

@@ -1,7 +1,10 @@
 #include "PhysicsScene.h"
 #include <list>
 #include "RigidBody.h"
+#include "Sphere.h"
+#include "PLane.h"
 #include <iostream>
+const double SHAPE_COUNT = 2;
 using namespace std;
 
 PhysicsScene::PhysicsScene() : m_timeStep(0.01f), m_gravity(glm::vec2(0, 0)) { }
@@ -101,3 +104,137 @@ void PhysicsScene::removeActor(PhysicsObject* actor)
 	
 }
 
+
+typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
+
+static fn collisionFunctionArray[] =
+{
+	 PhysicsScene::plane2Plane, PhysicsScene::plane2Sphere,
+	 PhysicsScene::sphere2Plane, PhysicsScene::sphere2Sphere,
+};
+
+
+void PhysicsScene::checkForCollision()
+{
+	int actorCount = m_actors.size();
+	//need to check for collisions against all objects except this one.
+	for (int outer = 0; outer < actorCount - 1; outer++)
+	{
+		for (int inner = outer + 1; inner < actorCount; inner++)
+		{
+			PhysicsObject* object1 = m_actors[outer];
+			PhysicsObject* object2 = m_actors[inner];
+			int shapeId1 = object1->getShapeID();
+			int shapeId2 = object2->getShapeID();
+			// using function pointers
+			int functionIdx = (shapeId1 * SHAPE_COUNT) + shapeId2;
+			fn collisionFunctionPtr = collisionFunctionArray[functionIdx];
+			if (collisionFunctionPtr != nullptr)
+			{
+				// did a collision occur?
+				collisionFunctionPtr(object1, object2);
+			}
+		}
+	}
+}
+bool PhysicsScene::sphere2Sphere(PhysicsObject* obj1, PhysicsObject* obj2)
+{
+	//try to cast objects to sphere and sphere
+	Sphere* sphere1 = dynamic_cast<Sphere*>(obj1);
+	Sphere* sphere2 = dynamic_cast<Sphere*>(obj2);
+	//if we are successful then test for collision
+	if (sphere1 != nullptr && sphere2 != nullptr)
+	{
+		if (glm::distance(sphere1->getPosition(), sphere2->getPosition()) < (sphere1->getRadius() + sphere2->getRadius()))
+		{
+			sphere1->resolveCollision(sphere2);
+			return true;
+		}
+		else return false;
+		//this is where the collision detection happens
+		//you need code which sets the velocity of the two spheres to zero
+		//if they are overlapping
+		// get distance between 2 spheres
+		// if distance is less than the combined radius of
+		// both spheres, then a collision occurred so set the
+		// velocity of both spheres to 0 (we’ll add collision resolution later)
+	}
+	return false;
+}
+
+bool PhysicsScene::sphere2Plane(PhysicsObject* obj1, PhysicsObject* obj2)
+{
+	Sphere* sphere = dynamic_cast<Sphere*>(obj1);
+	Plane* plane = dynamic_cast<Plane*>(obj2);
+	//if we are successful then test for collision
+	if (sphere != nullptr && plane != nullptr)
+	{
+		glm::vec2 collisionNormal = plane->getNormal();
+		float sphereToPlane = glm::dot(
+			sphere->getPosition(),
+			plane->getNormal()) - plane->getDistance();
+		// if we are behind plane then we flip the normal
+		if (sphereToPlane < 0) {
+			collisionNormal *= -1;
+			sphereToPlane *= -1;
+		}
+		float intersection = sphere->getRadius() - sphereToPlane;
+		if (intersection > 0) {
+			plane->resolveCollision(sphere);
+			//set sphere velocity to zero here
+			return true;
+		}
+		std::cout << "it workd" << std::endl;
+	}
+	return false;
+}
+
+bool PhysicsScene::plane2Sphere(PhysicsObject* obj1, PhysicsObject* obj2)
+{
+	Sphere* sphere = dynamic_cast<Sphere*>(obj1);
+	Plane* plane = dynamic_cast<Plane*>(obj2);
+	//if we are successful then test for collision
+	if (sphere != nullptr && plane != nullptr)
+	{
+		glm::vec2 collisionNormal = plane->getNormal();
+		float sphereToPlane = glm::dot(
+			sphere->getPosition(),
+			plane->getNormal()) - plane->getDistance();
+		// if we are behind plane then we flip the normal
+		if (sphereToPlane < 0) {
+			collisionNormal *= -1;
+			sphereToPlane *= -1;
+		}
+		float intersection = sphere->getRadius() - sphereToPlane;
+		if (intersection > 0) {
+			//set sphere velocity to zero here
+			return true;
+		}
+		std::cout << "it workd" << std::endl;
+	}
+	return false;
+}
+bool PhysicsScene::plane2Plane(PhysicsObject* obj1, PhysicsObject* obj2)
+{
+	Sphere* sphere = dynamic_cast<Sphere*>(obj1);
+	Plane* plane = dynamic_cast<Plane*>(obj2);
+	//if we are successful then test for collision
+	if (sphere != nullptr && plane != nullptr)
+	{
+		glm::vec2 collisionNormal = plane->getNormal();
+		float sphereToPlane = glm::dot(
+			sphere->getPosition(),
+			plane->getNormal()) - plane->getDistance();
+		// if we are behind plane then we flip the normal
+		if (sphereToPlane < 0) {
+			collisionNormal *= -1;
+			sphereToPlane *= -1;
+		}
+		float intersection = sphere->getRadius() - sphereToPlane;
+		if (intersection > 0) {
+			//set sphere velocity to zero here
+			return true;
+		}
+	}
+	return false;
+}

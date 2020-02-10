@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include "PhysicsScene.h"
+#include "PLane.h"
 class Tutorial_fixedTimeStepApp : public aie::Application {
 public:
 
@@ -16,8 +17,12 @@ public:
 	virtual void draw();
 
 protected:
-
+	Plane* m_plane;
 	aie::Renderer2D*	m_2dRenderer;
 	aie::Font*			m_font;
 	PhysicsScene* m_physicsScene;
+
+
+
+
 };

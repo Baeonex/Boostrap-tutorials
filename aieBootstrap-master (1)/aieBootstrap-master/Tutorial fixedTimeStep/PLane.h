@@ -1,13 +1,15 @@
 #pragma once
 #include "PhysicsScene.h"
-class Plane : public PhysicsObject
+#include "RigidBody.h"
+class Plane : public Rigidbody
 {
 public:
-    Plane() : PhysicsObject(ShapeType::PLANE) {
+
+    Plane() : Rigidbody(ShapeType::PLANE,glm::vec2(0,0), glm::vec2(0,0), 0,0) {
         m_distanceToOrigin = 0;
         m_normal = glm::vec2(0, 1);
     }
-    Plane(glm::vec2 normal, float distance) : PhysicsObject(ShapeType::PLANE)
+    Plane(glm::vec2 normal, float distance) : Rigidbody(ShapeType::PLANE, glm::vec2(0, 0), glm::vec2(0, 0), 0, 0)
     {
         m_distanceToOrigin = distance;
         m_normal = normal;
@@ -16,7 +18,8 @@ public:
     {
 
     }
-
+    virtual void resolveCollision(Rigidbody* actor2);
+    virtual bool checkCollision(PhysicsObject* pOther) { return false; }
     virtual void fixedUpdate(glm::vec2 gravity, float timeStep) {}
     virtual void debug() {}
     virtual void makeGizmo();
