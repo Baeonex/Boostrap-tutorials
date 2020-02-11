@@ -34,9 +34,12 @@ public:
     float getLinearDrag() { return m_linearDrag; }
     float getAngularDrag() { return m_angularDrag; }
     float getElasticity() { return m_elasticity; }
+    float getAngualarVelocity() { return m_angularVelocity; }
+    float getMoment() { return m_moment; }
     void setLinearDrag(float linearDrag) { m_linearDrag = linearDrag; }
     void setAngularDrag(float angularDrag) { m_angularDrag = angularDrag; }
     void setElasticity(float elasticity) { m_elasticity = elasticity; }
+
 protected: 
     float m_linearDrag;
     float m_angularDrag;

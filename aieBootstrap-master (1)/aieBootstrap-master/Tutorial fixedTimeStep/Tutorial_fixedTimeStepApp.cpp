@@ -31,7 +31,7 @@ bool Tutorial_fixedTimeStepApp::startup() {
 
 	m_physicsScene->addActor(sphere);
 	m_physicsScene->addActor(m_plane);
-	sphere->applyForce(glm::vec2(30, 0));
+	sphere->applyForce(glm::vec2(30, 0), sphere->getPosition());
 
 	/*
 	m_physicsScene->setGravity(glm::vec2(0,-10));

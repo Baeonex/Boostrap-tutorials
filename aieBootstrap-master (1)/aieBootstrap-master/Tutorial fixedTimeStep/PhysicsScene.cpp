@@ -111,7 +111,7 @@ bool PhysicsScene::sphere2Sphere(PhysicsObject* obj1, PhysicsObject* obj2)
 	{
 		if (glm::distance(sphere1->getPosition(), sphere2->getPosition()) < (sphere1->getRadius() + sphere2->getRadius()))
 		{
-			sphere1->resolveCollision(sphere2);
+			sphere1->resolveCollision(sphere2, 0.5f * (sphere1->getPosition() + sphere2->getPosition()));
 			return true;
 		}
 		else return false;
