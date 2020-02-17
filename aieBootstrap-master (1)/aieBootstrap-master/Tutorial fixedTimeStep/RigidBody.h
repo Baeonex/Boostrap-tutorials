@@ -14,6 +14,7 @@ public:
         m_elasticity = 1;
         m_linearDrag = 0.3f;
         m_isKinematic = false;
+        m_angularVelocity = 0;
     }
     ~Rigidbody(){}
 
@@ -23,7 +24,6 @@ public:
 
     virtual void resolveCollision(Rigidbody* actor2, glm::vec2 contact, glm::vec2* collisionNormal=nullptr);
 
-    virtual bool checkCollision(PhysicsObject* pOther) = 0;
 
     glm::vec2 getPosition() { return m_position; } 
     float getRotation() { return m_rotation; }
@@ -36,10 +36,13 @@ public:
     float getElasticity() { return m_elasticity; }
     float getAngualarVelocity() { return m_angularVelocity; }
     float getMoment() { return m_moment; }
+    float getKineticEnergy();
+    bool isKinematic() { return m_isKinematic; }
     void setLinearDrag(float linearDrag) { m_linearDrag = linearDrag; }
     void setAngularDrag(float angularDrag) { m_angularDrag = angularDrag; }
     void setElasticity(float elasticity) { m_elasticity = elasticity; }
-
+    void setPosition(glm::vec2 position) { m_position = position; }
+    void setAngularVelocity(float angularVelocity) { m_angularVelocity = angularVelocity; }
 protected: 
     float m_linearDrag;
     float m_angularDrag;

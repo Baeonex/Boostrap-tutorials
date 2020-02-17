@@ -9,18 +9,3 @@ void Sphere::makeGizmo()
 	aie::Gizmos::add2DCircle(m_position, m_radius, 12, m_colour);
 	aie::Gizmos::add2DLine(m_position, m_position + end, glm::vec4(1, 1, 1, 1));
 }
-bool Sphere::checkCollision(PhysicsObject* pOther)
-{
-	Sphere* sphere = dynamic_cast<Sphere*>(pOther);
-	if (sphere != NULL)
-	{
-		if (glm::distance(m_position, sphere->m_position) < (m_radius + sphere->m_radius))
-		{
-			return true;
-		}
-		else return false;
-	}
-	else
-		return false;
-}
-

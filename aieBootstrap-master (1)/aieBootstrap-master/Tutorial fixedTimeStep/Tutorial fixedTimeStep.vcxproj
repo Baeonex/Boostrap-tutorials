@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
     <ClCompile Include="PLane.cpp" />
     <ClCompile Include="RigidBody.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Box.h" />
     <ClInclude Include="PhysicsScene.h" />
     <ClInclude Include="PLane.h" />
     <ClInclude Include="RigidBody.h" />

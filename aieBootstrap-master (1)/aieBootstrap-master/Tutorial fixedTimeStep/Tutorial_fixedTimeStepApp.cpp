@@ -6,6 +6,7 @@
 #include "Sphere.h"
 #include "PLane.h"
 #include <cmath>
+#include "Box.h"
 Tutorial_fixedTimeStepApp::Tutorial_fixedTimeStepApp() {
 
 }
@@ -28,11 +29,18 @@ bool Tutorial_fixedTimeStepApp::startup() {
 
 	m_plane = new Plane(glm::vec2(-1, 0), 1);
 	Sphere * sphere = new Sphere(glm::vec2(-20, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1));
-
+	Sphere* sphere2 = new Sphere(glm::vec2(-50, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1));
+	Box* box = new Box(20.0f, 10.0f, 4.0f, glm::vec2(-50, 50), glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
 	m_physicsScene->addActor(sphere);
+	//m_physicsScene->addActor(sphere2);
+	Box* box2 = new Box(20.0f, 10.0f, 4.0f, glm::vec2(-20, 50), glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
+	m_physicsScene->addActor(box);
+	//m_physicsScene->addActor(box2);
 	m_physicsScene->addActor(m_plane);
-	sphere->applyForce(glm::vec2(30, 0), sphere->getPosition());
-
+	//sphere->applyForce(glm::vec2(30, 0), sphere->getPosition());
+	box->setAngularVelocity(0.5f);
+	box->applyForce(glm::vec2(100, 0), box->getPosition());
+	//box2->applyForce(glm::vec2(-20, 0), box->getPosition());
 	/*
 	m_physicsScene->setGravity(glm::vec2(0,-10));
 	m_physicsScene->setTimeStep(0.5f);

@@ -64,3 +64,8 @@ void Rigidbody::resolveCollision(Rigidbody* actor2, glm::vec2 contact,glm::vec2*
             actor2->applyForce(force, contact - actor2->m_position);
         }
 }
+float Rigidbody::getKineticEnergy()
+{
+    return 0.5f * (m_mass * glm::dot(m_velocity, m_velocity) +
+        m_moment * m_angularVelocity * m_angularVelocity);
+}

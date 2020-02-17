@@ -1,7 +1,7 @@
 #pragma once
 #include "glm\ext.hpp"
 #include <Vector>
-enum ShapeType { PLANE = 0, SPHERE, BOX };
+enum ShapeType { PLANE = 0, SPHERE, BOX, SHAPE_COUNT };
 
 
 class PhysicsObject {
@@ -38,8 +38,12 @@ public:
     static bool plane2Sphere(PhysicsObject*, PhysicsObject*);
     static bool sphere2Plane(PhysicsObject*, PhysicsObject*);
     static bool sphere2Sphere(PhysicsObject*, PhysicsObject*);
-
-
+    static bool box2Plane(PhysicsObject*, PhysicsObject*);
+    static bool box2Sphere(PhysicsObject*, PhysicsObject*);
+    static bool box2Box(PhysicsObject*, PhysicsObject*);
+    static bool plane2Box(PhysicsObject*, PhysicsObject*);
+    static bool sphere2Box(PhysicsObject*, PhysicsObject*);
+    
 protected:  
     glm::vec2 m_gravity;  
     float m_timeStep;  
