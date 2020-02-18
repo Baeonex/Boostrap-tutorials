@@ -7,6 +7,8 @@
 #include "PLane.h"
 #include <cmath>
 #include "Box.h"
+#include <iostream>
+#include "Button.h"
 Tutorial_fixedTimeStepApp::Tutorial_fixedTimeStepApp() {
 
 }
@@ -17,19 +19,26 @@ Tutorial_fixedTimeStepApp::~Tutorial_fixedTimeStepApp() {
 
 bool Tutorial_fixedTimeStepApp::startup() {
 	
-	m_2dRenderer = new aie::Renderer2D();
 
+	m_spawnBox = nullptr;
+	m_spawnCircle = nullptr;
+	m_2dRenderer = new aie::Renderer2D();
+	m_windowWidth = aie::Application::getWindowWidth();
+	m_windowHeight = aie::Application::getWindowHeight();
 	// increase the 2d line count to maximize the number of objects we can draw  
 	aie::Gizmos::create(16550U, 16550U, 65535U, 65535U);
-
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 	m_physicsScene = new PhysicsScene;
-	//m_physicsScene->setGravity(glm::vec2(0, -10));
+	m_physicsScene->setGravity(glm::vec2(0, -10));
 	m_physicsScene->setTimeStep(0.02f);
 
-	m_plane = new Plane(glm::vec2(-1, 0), 1);
-	Sphere * sphere = new Sphere(glm::vec2(-20, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1));
-	Sphere* sphere2 = new Sphere(glm::vec2(-50, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1));
+	m_plane = new Plane(glm::vec2(-1, 0), -70);//right
+	Plane* m_plane4 = new Plane(glm::vec2(1, 0), -100);//left
+	Plane* m_plane2 = new Plane(glm::vec2(0, -1), -56);//top
+	Plane* m_plane3 = new Plane(glm::vec2(0, 1), -56);//bottom
+	m_physicsScene->addActor(m_plane);
+	Sphere * sphere = new Sphere(glm::vec2(-20, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
+	Sphere* sphere2 = new Sphere(glm::vec2(-50, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
 	Box* box = new Box(20.0f, 10.0f, 4.0f, glm::vec2(-50, 50), glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
 	m_physicsScene->addActor(sphere);
 	//m_physicsScene->addActor(sphere2);
@@ -37,9 +46,14 @@ bool Tutorial_fixedTimeStepApp::startup() {
 	m_physicsScene->addActor(box);
 	//m_physicsScene->addActor(box2);
 	m_physicsScene->addActor(m_plane);
+	m_physicsScene->addActor(m_plane2);
+	m_physicsScene->addActor(m_plane3);
+	m_physicsScene->addActor(m_plane4);
 	//sphere->applyForce(glm::vec2(30, 0), sphere->getPosition());
 	box->setAngularVelocity(0.5f);
-	box->applyForce(glm::vec2(100, 0), box->getPosition());
+	box->applyForce(glm::vec2(-200, 0), box->getPosition());
+	m_buttonBox = new Button("Box", 0.9, 0.9, 100, 50,glm::vec4(1,0,0,1));
+	m_buttonCircle = new Button("Circle", 0.9, 0.8, 100, 50, glm::vec4(1, 0, 1, 1));
 	//box2->applyForce(glm::vec2(-20, 0), box->getPosition());
 	/*
 	m_physicsScene->setGravity(glm::vec2(0,-10));
@@ -75,13 +89,53 @@ void Tutorial_fixedTimeStepApp::shutdown() {
 }
 
 void Tutorial_fixedTimeStepApp::update(float deltaTime) {
-
-	// input example
 	aie::Input* input = aie::Input::getInstance();
+	m_windowWidth = aie::Application::getWindowWidth();
+	m_windowHeight = aie::Application::getWindowHeight();
+	// input example
+	if (m_buttonBox->Update(m_windowHeight, m_windowWidth))
+	{
+		m_spawnBox = new Box(20.0f, 10.0f, 4.0f, glm::vec2(0, 0), glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
+		m_spawnCircle = nullptr;
+	}
+	if (m_buttonCircle->Update(m_windowHeight, m_windowWidth))
+	{
+		m_spawnCircle = new Sphere(glm::vec2(0, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
+		m_spawnBox = nullptr;
+	}
+	if (input->wasMouseButtonPressed(0) && input->getMouseX() < (m_windowWidth * 0.85))
+	{
+		//get the window dimensions
+		glm::vec2 windowDimensions = glm::vec2(aie::Application::getWindowWidth() * 0.5, aie::Application::getWindowHeight() * 0.5);
+		static float aspectRatio = windowDimensions.x / windowDimensions.y;
+
+		//get mouse pos
+		int mX, mY;
+		input->getMouseXY(&mX, &mY);
+
+		//convert mouse x and y to numbers in range -1 to 1;
+		glm::vec2 normalizedMousePos = (glm::vec2((float)mX, (float)mY) / windowDimensions) - glm::vec2(1.0, 1.0);
+
+		//convert mouse x and y into world space
+		glm::vec2 worldMousePos = glm::vec2(normalizedMousePos.x * 100, normalizedMousePos.y * 100 / aspectRatio);
+
+		if (m_spawnBox != nullptr)
+		{
+			m_spawnBox = new Box(20.0f, 10.0f, 4.0f, worldMousePos, glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
+			m_physicsScene->addActor(m_spawnBox);
+		}
+		if (m_spawnCircle != nullptr)
+		{
+			m_spawnCircle = new Sphere(worldMousePos, glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
+			m_physicsScene->addActor(m_spawnCircle);
+		}
+	}
+	std::cout << input->getMouseX() << std::endl;
 	aie::Gizmos::clear();
 	m_physicsScene->update(deltaTime);
 	m_physicsScene->updateGizmos();
 	m_plane->makeGizmo();
+	std::cout << m_windowWidth << m_windowHeight << std::endl;
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
@@ -96,6 +150,8 @@ void Tutorial_fixedTimeStepApp::draw() {
 	m_2dRenderer->begin();
 	//setupConinuousDemo(glm::vec2(40, 0), 40, 45, 10);
 	// draw your stuff here!
+	m_buttonBox->DrawBox(m_2dRenderer,m_windowHeight,m_windowWidth);
+	m_buttonCircle->DrawBox(m_2dRenderer, m_windowHeight, m_windowWidth);
 	static float aspectRatio = 16 / 9.0f;
 	aie::Gizmos::draw2D(glm::ortho<float>(-100, 100, -100 / aspectRatio, 100 / aspectRatio, -1.0f, 1.0f));
 	// output some text, uses the last used colour

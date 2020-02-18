@@ -163,6 +163,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
     <ClCompile Include="PLane.cpp" />
     <ClCompile Include="RigidBody.cpp" />
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="PhysicsScene.h" />
     <ClInclude Include="PLane.h" />
     <ClInclude Include="RigidBody.h" />

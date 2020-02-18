@@ -263,8 +263,8 @@ bool PhysicsScene::box2Plane(PhysicsObject* obj1, PhysicsObject* obj2) {
 			// will change with the force we're applying
 			float mass0 = 1.0f / (1.0f / box->getMass() + (r * r) / box->getMoment());
 			// and apply the force
-			box->applyForce(acceleration * mass0, localContact);
 			box->setPosition(box->getPosition() - plane->getNormal() * penetration);
+			box->applyForce(acceleration * mass0, localContact);
 		}
 	}
 	return false;

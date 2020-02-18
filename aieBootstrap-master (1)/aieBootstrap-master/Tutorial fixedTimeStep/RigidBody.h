@@ -15,6 +15,7 @@ public:
         m_linearDrag = 0.3f;
         m_isKinematic = false;
         m_angularVelocity = 0;
+        //m_moment = 0;
     }
     ~Rigidbody(){}
 
