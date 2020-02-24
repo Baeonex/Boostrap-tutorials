@@ -4,17 +4,18 @@
 class Rigidbody : public PhysicsObject
 {
 public:
-    Rigidbody(ShapeType shapeID, glm::vec2 position, glm::vec2 velocity, float rotation, float mass) : PhysicsObject(shapeID) {
+    Rigidbody(ShapeType shapeID, glm::vec2 position, glm::vec2 velocity, float rotation, float mass, float moment) : PhysicsObject(shapeID) {
         m_shapeID = shapeID;
         m_position = position;
         m_velocity = velocity;
         m_rotation = rotation;
         m_mass = mass;
-        m_angularDrag = 0.1f;
+        m_angularDrag = 1.0f;
         m_elasticity = 1;
         m_linearDrag = 0.3f;
         m_isKinematic = false;
         m_angularVelocity = 0;
+        m_moment = moment;
         //m_moment = 0;
     }
     ~Rigidbody(){}
@@ -24,7 +25,7 @@ public:
     void applyForce(glm::vec2 force, glm::vec2 pos); 
 
     virtual void resolveCollision(Rigidbody* actor2, glm::vec2 contact, glm::vec2* collisionNormal=nullptr);
-
+    virtual float getMomentFormula() = 0;
 
     glm::vec2 getPosition() { return m_position; } 
     float getRotation() { return m_rotation; }
@@ -52,6 +53,9 @@ protected:
     float m_mass;   
     float m_rotation; //2D so we only need a single float to represent our rotation
     float m_angularVelocity;
+    glm::vec2 m_angularForce;
+    glm::vec2 m_angualrAcceleration;
+    glm::vec2 m_angleVelocity;
     float m_moment;
     float m_elasticity;
     bool m_isKinematic;

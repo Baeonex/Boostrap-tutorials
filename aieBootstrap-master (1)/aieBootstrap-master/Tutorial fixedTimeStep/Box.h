@@ -3,7 +3,7 @@
 class Box : public Rigidbody
 {
 public:
-	Box(float width, float height, float mass, glm::vec2 position, glm::vec4 colour, glm::vec2 velocity) : Rigidbody(BOX, position, velocity, 0, mass)
+	Box(float width, float height, float mass, glm::vec2 position, glm::vec4 colour, glm::vec2 velocity) : Rigidbody(BOX, position, velocity, 0, mass, 1.0f / 12.0f * (mass * (height/2) * (width/2)))
 	{
 		m_width = width;
 		m_height = height;
@@ -16,7 +16,9 @@ public:
 	bool checkBoxCorners(Box& box, glm::vec2& contact, int& numContacts, float& pen, glm::vec2& edgeNormal);
 	virtual void makeGizmo();
 	virtual void fixedUpdate(glm::vec2 gravity, float timeStep);
-
+	virtual float getMomentFormula() {
+		return ((1 / 12) * m_mass * ((m_height * m_height) + (m_width * m_width)));
+	}
 	float getHeight() { return m_height; }
 	float getWidth() { return m_width; }
 	glm::vec2 getExtents() { return m_extents; }

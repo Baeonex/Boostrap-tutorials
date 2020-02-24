@@ -1,6 +1,6 @@
 #include "Box.h"
 #include "Gizmos.h"
-
+#include <iostream>
 void Box::fixedUpdate(glm::vec2 gravity, float timeStep)
 {
 	Rigidbody::fixedUpdate(gravity, timeStep);
@@ -10,7 +10,7 @@ void Box::fixedUpdate(glm::vec2 gravity, float timeStep)
 	float sn = sinf(m_rotation);
 	m_localX = glm::normalize(glm::vec2(cs, sn));
 	m_localY = glm::normalize(glm::vec2(-sn, cs));
-
+	std::cout << m_rotation << std::endl;
 }
 
 void Box::makeGizmo()

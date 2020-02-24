@@ -35,14 +35,14 @@ bool Tutorial_fixedTimeStepApp::startup() {
 	m_plane = new Plane(glm::vec2(-1, 0), -70);//right
 	Plane* m_plane4 = new Plane(glm::vec2(1, 0), -100);//left
 	Plane* m_plane2 = new Plane(glm::vec2(0, -1), -56);//top
-	Plane* m_plane3 = new Plane(glm::vec2(0, 1), -56);//bottom
+	Plane* m_plane3 = new Plane(glm::vec2(0, 1), -20);//bottom
 	m_physicsScene->addActor(m_plane);
 	Sphere * sphere = new Sphere(glm::vec2(-20, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
 	Sphere* sphere2 = new Sphere(glm::vec2(-50, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
 	Box* box = new Box(20.0f, 10.0f, 4.0f, glm::vec2(-50, 50), glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
 	m_physicsScene->addActor(sphere);
 	//m_physicsScene->addActor(sphere2);
-	Box* box2 = new Box(20.0f, 10.0f, 4.0f, glm::vec2(-20, 50), glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
+	//Box* box2 = new Box(20.0f, 10.0f, 4.0f, glm::vec2(-20, 50), glm::vec4(1, 0, 0, 1), glm::vec2(0, 0));
 	m_physicsScene->addActor(box);
 	//m_physicsScene->addActor(box2);
 	m_physicsScene->addActor(m_plane);
@@ -50,8 +50,7 @@ bool Tutorial_fixedTimeStepApp::startup() {
 	m_physicsScene->addActor(m_plane3);
 	m_physicsScene->addActor(m_plane4);
 	//sphere->applyForce(glm::vec2(30, 0), sphere->getPosition());
-	box->setAngularVelocity(0.5f);
-	box->applyForce(glm::vec2(-200, 0), box->getPosition());
+	//box->setAngularVelocity(0.5f);
 	m_buttonBox = new Button("Box", 0.9, 0.9, 100, 50,glm::vec4(1,0,0,1));
 	m_buttonCircle = new Button("Circle", 0.9, 0.8, 100, 50, glm::vec4(1, 0, 1, 1));
 	//box2->applyForce(glm::vec2(-20, 0), box->getPosition());
@@ -130,12 +129,10 @@ void Tutorial_fixedTimeStepApp::update(float deltaTime) {
 			m_physicsScene->addActor(m_spawnCircle);
 		}
 	}
-	std::cout << input->getMouseX() << std::endl;
 	aie::Gizmos::clear();
 	m_physicsScene->update(deltaTime);
 	m_physicsScene->updateGizmos();
 	m_plane->makeGizmo();
-	std::cout << m_windowWidth << m_windowHeight << std::endl;
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();

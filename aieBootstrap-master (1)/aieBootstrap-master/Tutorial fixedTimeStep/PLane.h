@@ -5,11 +5,11 @@ class Plane : public Rigidbody
 {
 public:
 
-    Plane() : Rigidbody(ShapeType::PLANE,glm::vec2(0,0), glm::vec2(0,0), 0,0) {
+    Plane() : Rigidbody(ShapeType::PLANE,glm::vec2(0,0), glm::vec2(0,0), 0,0,0) {
         m_distanceToOrigin = 0;
         m_normal = glm::vec2(0, 1);
     }
-    Plane(glm::vec2 normal, float distance) : Rigidbody(ShapeType::PLANE, glm::vec2(0, 0), glm::vec2(0, 0), 0, 0)
+    Plane(glm::vec2 normal, float distance) : Rigidbody(ShapeType::PLANE, glm::vec2(0, 0), glm::vec2(0, 0), 0, 0,0)
     {
         m_distanceToOrigin = distance;
         m_normal = normal;
@@ -26,6 +26,7 @@ public:
         m_distanceToOrigin = 0;  
         m_normal = glm::vec2(0, 1);
     }
+    virtual float getMomentFormula() { return 0; }
     glm::vec2 getNormal() { return m_normal; }
     float getDistance() { return m_distanceToOrigin; }
 
