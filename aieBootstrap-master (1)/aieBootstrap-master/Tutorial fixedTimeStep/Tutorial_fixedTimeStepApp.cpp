@@ -35,7 +35,7 @@ bool Tutorial_fixedTimeStepApp::startup() {
 	m_plane = new Plane(glm::vec2(-1, 0), -70);//right
 	Plane* m_plane4 = new Plane(glm::vec2(1, 0), -100);//left
 	Plane* m_plane2 = new Plane(glm::vec2(0, -1), -56);//top
-	Plane* m_plane3 = new Plane(glm::vec2(0, 1), -20);//bottom
+	Plane* m_plane3 = new Plane(glm::vec2(0, 1), -56);//bottom
 	m_physicsScene->addActor(m_plane);
 	Sphere * sphere = new Sphere(glm::vec2(-20, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
 	Sphere* sphere2 = new Sphere(glm::vec2(-50, 50), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
@@ -102,7 +102,7 @@ void Tutorial_fixedTimeStepApp::update(float deltaTime) {
 		m_spawnCircle = new Sphere(glm::vec2(0, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 1, 1));
 		m_spawnBox = nullptr;
 	}
-	if (input->wasMouseButtonPressed(0) && input->getMouseX() < (m_windowWidth * 0.85))
+	if (input->wasMouseButtonPressed(0) && input->getMouseX() < (m_windowWidth * 0.8f))
 	{
 		//get the window dimensions
 		glm::vec2 windowDimensions = glm::vec2(aie::Application::getWindowWidth() * 0.5, aie::Application::getWindowHeight() * 0.5);
