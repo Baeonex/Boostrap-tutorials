@@ -94,6 +94,10 @@ void PhysicsScene::checkForCollision()
 			int shapeId1 = object1->getShapeID();
 			int shapeId2 = object2->getShapeID();
 			// using function pointers
+			// this check will ensure we don't include any joints 
+			// in the collision checks
+			if (shapeId1 < 0 || shapeId2 < 0)
+				continue;
 			int functionIdx = (shapeId1 * SHAPE_COUNT) + shapeId2;
 			fn collisionFunctionPtr = collisionFunctionArray[functionIdx];
 			if (collisionFunctionPtr != nullptr)
@@ -318,9 +322,23 @@ bool PhysicsScene::box2Sphere(PhysicsObject* obj1, PhysicsObject* obj2) {
 			}
 		}
 		if (numContacts > 0) {
-			// average, and convert back into world coords
-			contact = box->getPosition() + (1.0f / numContacts) *
-				(box->getLocalX() * contact.x + box->getLocalY() * contact.y);
+
+			contact = box->getPosition() + (1.0f / numContacts) * (box->getLocalX()
+				* contact.x + box->getLocalY() * contact.y);
+			// with the contact point we can find a penetration vector
+			float pen = sphere->getRadius() - glm::length(contact - sphere->getPosition());
+			glm::vec2 penVec = glm::normalize(contact - sphere->getPosition()) * pen;
+			// move each shape away in the direction of penitration
+			if (!box->isKinematic() && !sphere->isKinematic()) {
+				box->setPosition(box->getPosition() + penVec * 0.5f);
+				sphere->setPosition(sphere->getPosition() - penVec * 0.5f);
+			}
+			else if (!box->isKinematic()) {
+				box->setPosition(box->getPosition() + penVec);
+			}
+			else {
+				sphere->setPosition(sphere->getPosition() - penVec);
+			}
 			box->resolveCollision(sphere, contact, direction);
 		}
 		delete direction;
@@ -343,6 +361,19 @@ bool PhysicsScene::box2Box(PhysicsObject* obj1, PhysicsObject* obj2) {
 			norm = -norm;
 		}
 		if (pen > 0) {
+			glm::vec2 penVec = glm::normalize(contact - box2->getPosition()) * pen;
+			// move each shape away in the direction of penitration
+			if (!box1->isKinematic() && !box2->isKinematic()) {
+				box1->setPosition(box1->getPosition() + penVec * 0.5f);
+				box2->setPosition(box2->getPosition() - penVec * 0.5f);
+			}
+			else if (!box1->isKinematic()) {
+				box1->setPosition(box1->getPosition() + penVec);
+			}
+			else {
+				box2->setPosition(box2->getPosition() - penVec);
+			}
+
 			box1->resolveCollision(box2, contact / float(numContacts), &norm);
 		}
 		return true;

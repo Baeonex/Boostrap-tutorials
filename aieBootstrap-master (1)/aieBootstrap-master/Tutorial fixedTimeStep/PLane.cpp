@@ -28,3 +28,7 @@ void Plane::resolveCollision(Rigidbody* actor2, glm::vec2 contact)
 
 	
 }
+bool Plane::ContainsPoint(glm::vec2 point) const
+{
+	return false;
+}

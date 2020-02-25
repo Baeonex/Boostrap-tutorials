@@ -25,7 +25,7 @@ public:
 	void setColour(glm::vec4 colour) { m_colour = colour; }
 	glm::vec2 getLocalX() { return m_localX; }
 	glm::vec2 getLocalY() { return m_localY; }
-
+	bool virtual ContainsPoint(glm::vec2 point) const;
 
 private:
 	float m_width;

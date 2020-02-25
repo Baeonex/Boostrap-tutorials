@@ -9,3 +9,8 @@ void Sphere::makeGizmo()
 	aie::Gizmos::add2DCircle(m_position, m_radius, 12, m_colour);
 	aie::Gizmos::add2DLine(m_position, m_position + end, glm::vec4(1, 1, 1, 1));
 }
+
+bool Sphere::ContainsPoint(glm::vec2 point) const
+{
+	return glm::distance(point, m_position) < m_radius;
+}

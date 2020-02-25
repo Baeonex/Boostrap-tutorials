@@ -12,7 +12,7 @@ public:
         m_mass = mass;
         m_angularDrag = 1.0f;
         m_elasticity = 1;
-        m_linearDrag = 0.3f;
+        m_linearDrag = 0.1f;
         m_isKinematic = false;
         m_angularVelocity = 0;
         m_moment = moment;
@@ -30,9 +30,9 @@ public:
     glm::vec2 getPosition() { return m_position; } 
     float getRotation() { return m_rotation; }
     glm::vec2 getVelocity() { return m_velocity; }
-    float getMass() { return m_mass; }
+    float getMass() { return (m_isKinematic) ? INT_MAX :m_mass; }
     glm::vec2 setVelocity(glm::vec2 newVelocity) { return m_velocity = newVelocity; }
-
+    virtual bool ContainsPoint(glm::vec2 point) { return false; }
     float getLinearDrag() { return m_linearDrag; }
     float getAngularDrag() { return m_angularDrag; }
     float getElasticity() { return m_elasticity; }
@@ -40,6 +40,7 @@ public:
     float getMoment() { return m_moment; }
     float getKineticEnergy();
     bool isKinematic() { return m_isKinematic; }
+    void setKinematic(bool state) { m_isKinematic = state; }
     void setLinearDrag(float linearDrag) { m_linearDrag = linearDrag; }
     void setAngularDrag(float angularDrag) { m_angularDrag = angularDrag; }
     void setElasticity(float elasticity) { m_elasticity = elasticity; }
@@ -53,9 +54,6 @@ protected:
     float m_mass;   
     float m_rotation; //2D so we only need a single float to represent our rotation
     float m_angularVelocity;
-    glm::vec2 m_angularForce;
-    glm::vec2 m_angualrAcceleration;
-    glm::vec2 m_angleVelocity;
     float m_moment;
     float m_elasticity;
     bool m_isKinematic;

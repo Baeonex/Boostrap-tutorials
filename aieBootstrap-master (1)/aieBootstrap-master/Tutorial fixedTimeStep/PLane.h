@@ -26,6 +26,7 @@ public:
         m_distanceToOrigin = 0;  
         m_normal = glm::vec2(0, 1);
     }
+    virtual bool ContainsPoint(glm::vec2 point) const;
     virtual float getMomentFormula() { return 0; }
     glm::vec2 getNormal() { return m_normal; }
     float getDistance() { return m_distanceToOrigin; }

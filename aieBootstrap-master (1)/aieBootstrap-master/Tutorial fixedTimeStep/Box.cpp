@@ -10,7 +10,6 @@ void Box::fixedUpdate(glm::vec2 gravity, float timeStep)
 	float sn = sinf(m_rotation);
 	m_localX = glm::normalize(glm::vec2(cs, sn));
 	m_localY = glm::normalize(glm::vec2(-sn, cs));
-	std::cout << m_rotation << std::endl;
 }
 
 void Box::makeGizmo()
@@ -96,3 +95,11 @@ bool Box::checkBoxCorners(Box& box, glm::vec2& contact, int& numContacts, float&
 	return res;
 }
 
+bool Box::ContainsPoint(glm::vec2 point) const
+{
+	// Convert the point to box local space
+	glm::vec2 newPoint(glm::dot(point - m_position, m_localX), glm::dot(point - m_position, m_localY));
+
+	return newPoint.x < m_extents.x && newPoint.x > -m_extents.x &&
+		newPoint.y < m_extents.y && newPoint.y > -m_extents.y;
+}

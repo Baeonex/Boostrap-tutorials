@@ -168,6 +168,7 @@
     <ClCompile Include="PLane.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Spring.cpp" />
     <ClCompile Include="Tutorial_fixedTimeStepApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="PLane.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Spring.h" />
     <ClInclude Include="Tutorial_fixedTimeStepApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
